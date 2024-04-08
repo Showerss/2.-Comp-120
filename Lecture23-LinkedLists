@@ -21,22 +21,30 @@ Lecture 23: Linked Lists
         - is_empty: check if the list is empty
         - __len__: get the number of nodes in the list
         - __str__: get a string representation of the list
-            you could write this __str__(2, 3) == "2 -> 3"
+            you could write this str(2, 3) == "2 -> 3"
         - __contains__: check if a value is in the list
-            you could write this __contains__(2, 3) == False
+            you could write this contains(2, 3) == False
         - __eq__: check if two lists are equal
-            you could write this __eq__(2, 3) == False
+            you could write this eq(2, 3) == False
     - nodes are NOT data structures
     - __str__ is better than str because it allows you to print the object directly
     - to add to my linked list, I would create a new node with the add methods and set the next node to the current head, the eastiest is the head
     - the benefit of linked lists over lists are that you can add and remove elements in constant time
+        - also with linked lists each node has its own spot in memory and doesn't have to be contiguous
+        - the downside is that you can't access elements by index
+        - you would use linked lists over regular when
 
+
+    FOR UML DIAGRAMS:
+        the diamond means (has a)
+        the arrow means (is a)
 
 '''
 
 
 
 from typing import Any, Optional
+
 
 # Exercise 1:
 """
@@ -64,36 +72,78 @@ class LinkedList:
             self.head = None
 
     def __len__(self) -> int:
-        pass
+        count = 0
+        current = self.head
+        while current is not None:
+            count += 1
+            current = current.next
+        return count
+
     
     def __str__(self):
         pass
     
     def __contains__(self, value: Any) -> bool:
-        pass
-
+        current = self.head
+        while current is not None:
+        # for i in range(self.size()): (this would be O(2n) which is O(n))
+            if current.data == value: #if the data within the current node is the value in which we are looking for
+                return True
+            current = current.next
+        return False #if we don't find the value in the list
+    
     def __eq__(self, other):
         pass
 
-    def search(self, value: Any) -> bool:
-        pass
+    def search(self, value: Any) -> bool: #O(n) - because we have to iterate through the list
+        '''same as __contains__ but with a different name'''
+        current = self.head
+
+        while current is not None:
+            if current.data == value: #if the data within the current node is the value in which we are looking for
+                return True
+            current = current.next
+            
+        return False #if we don't find the value in the list
     
-    def add(self, data: Any):
+    def add(self, data: Any): #O(1) - because this is just an assignent 
         '''adding a node to the front of the list'''
         new_node = Node(data, self.head)
         self.head = new_node
 
-    def is_empty(self):
-        pass
+    def is_empty(self): #O(1) - because this is just a comparison
+        return self.head is None
 
-    def size(self) -> int:
-        pass
+    def size(self) -> int: #O(n) - because we have to iterate through the list
+        ''' same as __len__ but with a different name'''
+        count = 0
+        current = self.head
+        while current is not None:
+            count += 1
+            current = current.next
+        return count
 
     def append(self, value: Any) -> None:
-        pass
+        '''adding a node to the end of the list'''
+        current = self.head
+        previous = None
+        while current.next is not None: #loop through until you find the none return
+            previous = current #keep track of the previous node
+            current = current.next #keep moving to the next node
+
+        
+        new_node = Node(value, None) #create a new node
+        if self.is_empty() == False: #if the list is not empty
+            previous.next = new_node #once you find the none, set the next node to the new node (this should be the last)
+        else: #if the list is empty
+            self.head = new_node #set the head to the new node and begin a list
+
+
 
     def pop(self) -> Any:
-        pass
+        '''removing the first node from the list'''
+        current = self.head
+        previous = None
 
     def get_item(self, index: int) -> Any:
         pass
