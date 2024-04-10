@@ -1,11 +1,17 @@
 '''
-double linked lsit - 
-    
+double linked lsit  - able to move both ways
+    - each node has a reference to the next and previous node
+    - append is much faster
+    - pop is much faster
+    - get_item is much faster
+    - better at queues, because queues use both ends of the list
+
 
 linked list - great type complexity
             - not great for random access, stakcs, queues
             - not great for searching
             - great for insertion and deletion
+            - better for stacks, because stacks only use one end of the list (the beginning) because we add to the front
 
 '''
 
@@ -21,10 +27,12 @@ from typing import Any, Optional
 class Node:
     data: Any
     next: Optional['Node'] # tricky: use quotes around type
+    prev: Optional['Node']
 
-    def __init__(self, data: Any, next: Optional['Node']):
+    def __init__(self, data: Any, next: Optional['Node'], prev: Optional['Node']):
       self.data = data
-      self.next = next     
+      self.next = next
+      self.prev = prev
 
     def __str__(self):
         """
@@ -54,6 +62,7 @@ class Node:
 class LinkedList:
     def __init__(self):
         self.head = None
+        self.tail = None
 
     def __len__(self) -> int:
         """ Returns length of list. """
@@ -83,8 +92,8 @@ class LinkedList:
 
     def __eq__(self, other):
         return (type(self) is type(other) and
-                (self.size(), self.head, self.get_item(len(self)-1)) ==
-                (other.size(), other.head, other.get_item(len(other)-1)))
+                (self.size(), self.head, self.tail, self.get_item(len(self)-1)) ==
+                (other.size(), other.head, other.tail, other.get_item(len(other)-1)))
 
     def search(self, value: Any) -> bool:
         """ Returns True if <value> is stored
@@ -100,13 +109,25 @@ class LinkedList:
     def add(self, data: Any):
         """ Adds new node containing data to
           front of this list. """
+        if self.is_empty():
+            new_node = Node(data, None, None)
+            self.head = new_node
+            self.tail = new_node
+
+        else:
+            new_node = Node(data, self.head, None)
+            self.head.prev = new_node
+            self.head = new_node
+
         new_node = Node(data, self.head)
         self.head = new_node
 
     def is_empty(self):
         """ Returns true if list is empty,
           False otherwise. """
+        #could change this to self.tail?
         return self.head == None
+    
 
     def size(self) -> int:
         """ Returns length of this list. """
@@ -121,32 +142,55 @@ class LinkedList:
     def append(self, value: Any) -> None:
         """ Adds new node with data set to <value>,
             placing it at end of list. """
-        new_node = Node(value, None)
         
         if self.head is None: # empty list case
+            new_node = (value, None, None)
             self.head = new_node
-        else:
-            curr = self.head
-            prev = None
-            while curr is not None:
-                prev = curr
-                curr = curr.next
+            self.tail = new_node
 
-            prev.next = new_node
+        else:
+            current_tail = self.tail
+            new_node = Node(value, None, current_tail)
+            current_tail = new_node
+            self.tail = new_node
+
+        # new_node = Node(value, None)
+        
+        # if self.head is None: # empty list case
+        #     self.head = new_node
+        # else:
+        #     curr = self.head
+        #     prev = None
+        #     while curr is not None:
+        #         prev = curr
+        #         curr = curr.next
+
+        #     prev.next = new_node
 
     def pop(self) -> Any:
         """ Removes/returns the list's last item. """
         assert not self.is_empty()     
         
-        curr = self.head
-        prev = None
+        current_tail = self.tail
+        before_tail = current_tail.prev
 
-        while curr.next is not None:
-            prev = curr
-            curr = curr.next
+        if before_tail is not None:
+            before_tail.next = None
+        else:
+            self.head = None
+
+        self.tail = before_tail
+        return current_tail.data
+
+        # curr = self.head
+        # prev = None
+
+        # while curr.next is not None:
+        #     prev = curr
+        #     curr = curr.next
             
-        prev.next = None
-        return curr.data
+        # prev.next = None
+        # return curr.data
 
     def get_item(self, index: int) -> Any:
         """ Gets the value at the given index. """   
