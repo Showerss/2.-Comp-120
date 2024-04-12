@@ -156,6 +156,7 @@ l.add(-8.3)
 print(l)
 assert len(l) == 2
 assert 5 in l
+
 l2 = LinkedList()
 l2.add(5)
 l2.add(90)

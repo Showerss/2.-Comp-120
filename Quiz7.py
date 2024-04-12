@@ -6,8 +6,12 @@
     connected. 
 """
 # a linked list is a data structure that is made up of nodes that are connected to each other.
-# the node can be broken into 2 parts, the data/value and the .next which is a reference to the next node in the list.
-#
+# the linked list class is the data structure that holds the nodes and has functions to manipulate the nodes in the list
+# the node class is the individual nodes that make up the linked list
+
+# the node can be broken into 2 parts, the data/value and the next which is a reference to the next node in the list.
+# in a linkedlist the head is called when we are trying to move the nodes around, the head is the first node in the list
+# linkedlists only search one way from the head to the end, we typically dont have a 'tail' reference in a singly linked list but the end could be thought of as that
 
 # Question 2:
 """
@@ -44,6 +48,21 @@ class LinkedList:
           False otherwise. """
         return self.head == None
     
+    def pop(self) -> Any:
+        '''removes then returns the first element in the list'''
+        if self.head is not None: # if the list is not empty, since it reads from front to back, this will be the first element
+            data = self.head.data # get the data from the first node in the list, 
+            self.head = self.head.next # set the head to the next node, removing the first node from the list
+        return data # return the data that was removed from that node 
+    
+    
 # Create your linked list with the ("hi", "hello", "you") data here
 
+quizlist = LinkedList()
+quizlist.add("hi")
+quizlist.add("hello")
+quizlist.add("you")
+
+
 # Delete the first item of the list here
+'''quizlist.pop()'''
