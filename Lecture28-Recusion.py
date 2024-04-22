@@ -6,6 +6,8 @@ all recursion needs a base case and a recursive case
 
 linkedlists are pretty similar to recursion since each node calls another node
 
+proof by induction:
+
 '''
 def count (x):
     if x < 0:
@@ -164,22 +166,39 @@ assert l2.search(90) == True
 
 
 
-def recursive_find() :
+def recursive_find(head:Optional['Node'], item:Any) -> bool:
     """ Returns true if the target is in the  
     list with the given head. """
-    pass
+    if head is None:
+        return False
+    elif head.data == item:
+        return True
+    else:
+        return recursive_find(head.next, item) # recursive case
   
-def recursive_get_item():
+def recursive_get_item(head:Optional['Node'], index:int) -> Any:
     """ Returns item at the given index
     (relative to head). Raises IndexError
     if index is invalid. """
-    pass
+    if head is None:
+        return False
+    elif index == 0: #if you get to the index you want, return the data
+        return head.data
+    else:
+        return recursive_get_item(head.next, index-1) # recursive case, this makes it so that you're looking for index[5], then [4], then [3], etc. until you get to the node you want, you move forward a head then subtract 1 from index
 
 # Exercise 3:
 """
     Write a recursive function to subtract 100 from each item
     in the linked list.
 """
+def recursion_100(head:Optional['Node']) -> None:
+    ''' Subtracts 100 from each item in the list '''
+    if head is None:
+        return False
+    else:
+        head.data -= 100 # subtract 100 from the data for each node
+        return recursion_100(head.next) 
 
 
 # Exercise 4:
@@ -188,3 +207,9 @@ def recursive_get_item():
     to 1000. For example, if the list was 52 -> 104 -> 44,
     then this function should return 1200.
 """
+def recursion_add(head:Optional['Node']) -> int:
+    ''' add all of the numbers to 1000'''
+    if head is None:
+        return 1000 #once it hits the end of the list, return 1000 as well, which will go and add 1000 to the previous node's data
+    else:
+        return head.data + recursion_add(head.next) # add the data for each node to the next node's data
