@@ -33,6 +33,33 @@ def grouping_numbers(numbers: list[float], max_number_groups: list[float]) -> bo
         that their sum is less than or equal to the numbers in 
         max_group_numbers. Returns False otherwise. 
     """
-    pass
+    
+    if len(numbers) == 0:
+        return True
+    else:
+
+        number_to_get_placed = numbers[0]
+        new_list = numbers[1:] #make a new list of everything except the first number that we just assigned
+
+        for i in range(len(max_number_groups)):
+
+            if max_number_groups[i] >= number_to_get_placed: #make sure it doesnt return negative when the number is placed
+                max_number_groups[i] -= number_to_get_placed #ta
+                if grouping_numbers(new_list, max_number_groups):
+                    return True
+                max_number_groups[i] += number_to_get_placed
+            
+            # #case2 include the number to the second index of the max_group_sum
+            # if number_to_get_placed >= max_number_groups[1]: #make sure it doesnt return negative
+            #     max_number_groups[i] -= number_to_get_placed
+            #     if grouping_numbers(new_list, max_number_groups):
+            #         return True
+            #     max_number_groups[i] += number_to_get_placed
+
+        return False
 
 print(grouping_numbers([1,3,6,12], [6,13,3]))
+
+
+
+            
